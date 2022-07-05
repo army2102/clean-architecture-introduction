@@ -1,14 +1,14 @@
 import express from 'express'
 
-import { ProfileDbAdapter } from '@/adapters/profileDb-adpater'
-import { ProfileUseCase } from '@/usecases/profile-usecase'
+import { ProfileDbAdapter } from '../../adapters/profileDb-adpater'
+import { ProfileUseCase } from '../../usecases/profile-usecase'
 import { config } from '../config'
 
 export const profileRoute = express.Router()
 
 // define the home page route
 export const getProfileController = async (req, res) => {
-  const { id } = req.body
+  const { id } = req.params
 
   const profileDbAdapter = new ProfileDbAdapter(config.dbConfig)
   await profileDbAdapter.connect()
@@ -25,4 +25,4 @@ export const getProfileController = async (req, res) => {
   })
 }
 
-profileRoute.get('/', getProfileController)
+profileRoute.get('/:id', getProfileController)

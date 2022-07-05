@@ -7,13 +7,8 @@
     "moduleResolution": "Node",
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": "./src",
-    "typeRoots": ["./src/@types"],
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "paths": {
-      "@/*": ["*"]
-    }
+    "experimentalDecorators": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

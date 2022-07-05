@@ -1,18 +1,12 @@
 import express from 'express'
+import { config } from './config'
 
-import { ProfileDbAdapter } from '@/adapters/profileDb-adpater'
-import { ProfileUseCase } from '@/usecases/profile-usecase'
 import { profileRoute } from './routes/profile-routes'
-;(async () => {
-  const app = express()
-  const port = 3000
 
-  // Init dependencies
+const app = express()
 
-  // Init API
-  app.use('/profile', profileRoute)
+app.use('/profile', profileRoute)
 
-  app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-  })
-})()
+app.listen(config.port, () => {
+  console.log(`Example app listening on port ${config.port}`)
+})
