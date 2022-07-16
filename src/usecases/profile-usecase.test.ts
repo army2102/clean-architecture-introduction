@@ -17,4 +17,27 @@ describe('Test ProfileUseCase', () => {
       expect(mockProfileDbAdapter.find).toBeCalledWith(dummyId)
     })
   })
+
+  describe('Test createProfile', () => {
+    it('Should return profile id', async () => {
+      const expected = ''
+      mockProfileDbAdapter.create.mockResolvedValue(expected)
+      const usecase = new ProfileUseCase(mockProfileDbAdapter)
+
+      const actual = await usecase.createProfile({
+        name: 'nae',
+        surname: '3x',
+        gender: 'male'
+      })
+
+      // TODO: Check if we should assert like this
+      expect(mockProfileDbAdapter.create).toBeCalledWith({
+        _id: undefined,
+        _name: 'nae',
+        _surname: '3x',
+        _gender: 'male'
+      })
+      expect(actual).toEqual(expected)
+    })
+  })
 })
