@@ -50,7 +50,7 @@ export const updateProfileController = async (req, res) => {
 }
 
 export const deleteProfileController = async (req, res) => {
-  const { id, name, surname, gender } = req.body
+  const { id } = req.body
 
   const profileUseCase = Container.get(ProfileUseCase)
   await profileUseCase.deleteProfile(id)
