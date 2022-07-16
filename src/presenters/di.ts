@@ -9,5 +9,5 @@ export const initContainer = async (): Promise<void> => {
   await profileDbAdapter.connect()
 
   Container.set('ProfileDbAdapter', profileDbAdapter)
-  Container.set('ProfileUseCase', Container.get(ProfileUseCase))
+  Container.set('ProfileUseCase', ProfileUseCase)
 }
