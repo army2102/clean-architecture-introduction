@@ -1,3 +1,5 @@
+import { Service, Inject } from 'typedi'
+
 import { ProfileEntity } from '../entities/profile-entity'
 
 export interface ProfileDbInterface {
@@ -7,10 +9,11 @@ export interface ProfileDbInterface {
   delete(id: string): Promise<void>
 }
 
+@Service()
 export class ProfileUseCase {
   private readonly profileDb: ProfileDbInterface
 
-  constructor(profileDb: ProfileDbInterface) {
+  constructor(@Inject('ProfileDbAdapter') profileDb: ProfileDbInterface) {
     this.profileDb = profileDb
   }
 
@@ -41,7 +44,9 @@ export class ProfileUseCase {
     const profile = await this.profileDb.find(id)
 
     for (const [field, value] of Object.entries(update)) {
-      profile[field] = value
+      if (value != undefined) {
+        profile[field] = value
+      }
     }
 
     await this.profileDb.update(profile)

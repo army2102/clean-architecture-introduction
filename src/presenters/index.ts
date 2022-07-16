@@ -1,12 +1,17 @@
-import express from 'express'
+import 'reflect-metadata'
+
 import { config } from './config'
+import { initContainer } from './di'
+import { createServer } from './server'
 
-import { profileRoute } from './routes/profile-routes'
+const initApp = async () => {
+  await initContainer()
 
-const app = express()
+  const server = createServer()
 
-app.use('/profile', profileRoute)
+  server.listen(config.port, () => {
+    console.log(`Example app listening on port ${config.port}`)
+  })
+}
 
-app.listen(config.port, () => {
-  console.log(`Example app listening on port ${config.port}`)
-})
+initApp()

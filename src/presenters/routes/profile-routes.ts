@@ -1,18 +1,14 @@
 import express from 'express'
+import Container from 'typedi'
 
-import { ProfileDbAdapter } from '../../adapters/profileDb-adpater'
 import { ProfileUseCase } from '../../usecases/profile-usecase'
-import { config } from '../config'
 
 export const profileRoute = express.Router()
 
-// define the home page route
 export const getProfileController = async (req, res) => {
   const { id } = req.params
 
-  const profileDbAdapter = new ProfileDbAdapter(config.dbConfig)
-  await profileDbAdapter.connect()
-  const profileUseCase = new ProfileUseCase(profileDbAdapter)
+  const profileUseCase = Container.get(ProfileUseCase)
   const profile = await profileUseCase.findProfile(id)
 
   res.json({
@@ -25,4 +21,44 @@ export const getProfileController = async (req, res) => {
   })
 }
 
+export const createProfileContoller = async (req, res) => {
+  const { name, surname, gender } = req.body
+
+  const profileUseCase = Container.get(ProfileUseCase)
+  const profileId = await profileUseCase.createProfile({
+    name,
+    surname,
+    gender
+  })
+
+  res.json({
+    data: { id: profileId }
+  })
+}
+
+export const updateProfileController = async (req, res) => {
+  const { id, name, surname, gender } = req.body
+
+  const profileUseCase = Container.get(ProfileUseCase)
+  await profileUseCase.updateProfile(id, {
+    name,
+    surname,
+    gender
+  })
+
+  res.json({})
+}
+
+export const deleteProfileController = async (req, res) => {
+  const { id, name, surname, gender } = req.body
+
+  const profileUseCase = Container.get(ProfileUseCase)
+  await profileUseCase.deleteProfile(id)
+
+  res.json({})
+}
+
 profileRoute.get('/:id', getProfileController)
+profileRoute.post('/', createProfileContoller)
+profileRoute.patch('/', updateProfileController)
+profileRoute.delete('/', deleteProfileController)

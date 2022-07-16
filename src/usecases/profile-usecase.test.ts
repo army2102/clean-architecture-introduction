@@ -1,4 +1,4 @@
-import { ProfileDbAdapter } from '../adapters/profileDb-adpater'
+import { ProfileDbAdapter } from '../adapters/profileDb-adapter'
 import { ProfileUseCase } from './profile-usecase'
 
 jest.mock('../adapters/profileDb-adpater')

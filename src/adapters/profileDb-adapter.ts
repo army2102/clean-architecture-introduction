@@ -1,15 +1,17 @@
+import { Inject, Service } from 'typedi'
 import { Collection, MongoClient, ObjectId } from 'mongodb'
-import { ProfileEntity } from '../entities/profile-entity'
 
+import { ProfileEntity } from '../entities/profile-entity'
 import { ProfileDbInterface } from '../usecases/profile-usecase'
 
 type DbConfig = { uri: string; database: string; collection: string }
 
+@Service()
 export class ProfileDbAdapter implements ProfileDbInterface {
   private dbCollection: Collection<Omit<ProfileEntity, 'id'>>
   private readonly dbConfig: DbConfig
 
-  constructor(dbConfig: DbConfig) {
+  constructor(@Inject('DbConfig') dbConfig: DbConfig) {
     this.dbConfig = dbConfig
   }
 
@@ -32,6 +34,7 @@ export class ProfileDbAdapter implements ProfileDbInterface {
 
   public async create(profile: ProfileEntity): Promise<string> {
     const { name, surname, gender } = profile
+
     const result = await this.dbCollection.insertOne({
       name,
       surname,
@@ -42,12 +45,16 @@ export class ProfileDbAdapter implements ProfileDbInterface {
   }
 
   public async update(profile: ProfileEntity): Promise<void> {
-    const { id, ...rest } = profile
+    const { id, name, surname, gender } = profile
 
     await this.dbCollection.updateOne(
       { _id: new ObjectId(id) },
       {
-        $set: rest
+        $set: {
+          name,
+          surname,
+          gender
+        }
       }
     )
   }
